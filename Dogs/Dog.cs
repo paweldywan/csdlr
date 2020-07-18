@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dogs
+public class Dog
 {
-    public class Dog
+    public void Speak()
     {
-        public void Speak()
-        {
-            Console.WriteLine("Woof");
-        }
+        Console.WriteLine("Woof");
     }
 }
+

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +29,11 @@ namespace csdlr
 
             //WriteSeparator();
 
-            TestDynamic();
+            //TestDynamic();
+
+            //WriteSeparator();
+
+            TestExcel();
 
 
             Console.ReadLine();
@@ -55,6 +61,37 @@ namespace csdlr
             dynamic o = GetASpeaker();
 
             o.Speak();
+
+
+            Type dogType = Assembly.Load("Dogs").GetType("Dog");
+
+            dynamic dog = Activator.CreateInstance(dogType);
+
+            dog.Speak();
+        }
+
+        private static void TestExcel()
+        {
+            Type excelType = Type.GetTypeFromProgID("Excel.Application");
+
+            dynamic excel = Activator.CreateInstance(excelType);
+
+            excel.Visible = true;
+
+            excel.Workbooks.Add();
+
+
+            dynamic sheet = excel.ActiveSheet;
+
+            Process[] processes = Process.GetProcesses();
+
+
+            for (int i = 0; i < processes.Length; i++)
+            {
+                sheet.Cells[i + 1, "A"] = processes[i].ProcessName;
+
+                sheet.Cells[i + 1, "B"] = processes[i].Threads.Count;
+            }
         }
     }
 }
