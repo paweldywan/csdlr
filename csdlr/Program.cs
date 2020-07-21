@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IronRuby;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,6 +54,10 @@ namespace csdlr
             WriteSeparator();
 
             TestDynamicObject();
+
+            WriteSeparator();
+
+            TestIronRuby();
 
 
             Console.ReadLine();
@@ -212,6 +217,26 @@ namespace csdlr
                 Console.WriteLine(employee.FirstName);
             }
         }
+
+        private static void TestIronRuby()
+        {
+            var engine = Ruby.CreateEngine();
+
+            var scope = engine.CreateScope();
+
+            scope.SetVariable("employee", new Employee { FirstName = "Scott C#" });
+
+            engine.ExecuteFile("Program.rb", scope);
+
+
+            dynamic ruby = engine.Runtime.Globals;
+
+            dynamic person = ruby.Person.@new();
+
+            person.firstName = "Scott Ruby";
+
+            person.speak();
+        }
     }
 
     internal class DynamicXml : DynamicObject, IEnumerable
@@ -252,7 +277,7 @@ namespace csdlr
             }
         }
 
-        public static implicit operator string (DynamicXml xml)
+        public static implicit operator string(DynamicXml xml)
         {
             return xml._xml.Value;
         }
